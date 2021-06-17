@@ -1,6 +1,7 @@
+import HsvColorCircle from '@assets/hsv-color-circle';
 import {StackNavigationProp} from '@react-navigation/stack';
 import * as React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {Item} from 'react-navigation-header-buttons';
 
 import {HeaderButtons} from './HeaderButtons';
@@ -42,7 +43,7 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Color Picker</Text>
+      <HsvColorCircle width={100} height={100} />
     </View>
   );
 };
