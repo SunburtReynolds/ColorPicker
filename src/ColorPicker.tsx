@@ -17,7 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Item} from 'react-navigation-header-buttons';
 
-import {ComplimentaryColors} from './ComplimentaryColors';
+import {ComplementaryColors} from './ComplementaryColors';
 import {HeaderButtons} from './HeaderButtons';
 import {Slider} from './Slider';
 import {Coordinates, Hsl, Hsv, RootStackParamList} from './types';
@@ -79,13 +79,13 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
     const color = hslToHslaString(hsl);
     navigation.setOptions({
       headerTintColor: color,
-      headerRight: () => (
+      headerLeft: () => (
         <HeaderButtons>
           <Item
-            title="Save"
-            iconName="content-save"
+            title="Back"
+            iconName="arrow-left"
             color={color}
-            onPress={saveColor}
+            onPress={() => navigation.pop()}
           />
         </HeaderButtons>
       ),
@@ -99,6 +99,18 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
       s: saturation.value,
       v: value.value,
     });
+    setHsl(newHsl);
+  };
+  const onPressColor = (newHue: number) => {
+    const hsv = {
+      h: newHue,
+      s: saturation.value,
+      v: value.value,
+    };
+    const newCords = deriveCoordsFromHsv(hsv, wheelRadius);
+    const newHsl = hsvToHsl(hsv);
+    hue.value = newHue;
+    puckCoords.value = newCords;
     setHsl(newHsl);
   };
 
@@ -197,7 +209,7 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
         value={value}
         onEndGesture={onEndSliderGesture}
       />
-      <ComplimentaryColors />
+      <ComplementaryColors currentHsl={hsl} onPressColor={onPressColor} />
     </View>
   );
 };
