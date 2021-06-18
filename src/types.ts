@@ -9,6 +9,12 @@ export type Hsv = {
   v: number;
 };
 
+export type Hsl = {
+  h: number;
+  s: number;
+  l: number;
+};
+
 export type Coordinates = {
   x: number;
   y: number;

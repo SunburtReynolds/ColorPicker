@@ -1,4 +1,4 @@
-import {Coordinates, Hsv, RootStackParamList} from './types';
+import {Coordinates, Hsl, Hsv, RootStackParamList} from './types';
 
 // keep result within range
 export const clamp = (num: number, min: number, max: number): number => {
@@ -8,7 +8,7 @@ export const clamp = (num: number, min: number, max: number): number => {
 
 // convert hsv to hsl color
 // math from here - https://stackoverflow.com/a/31851617
-export const hsvToHsl = (hsv: Hsv): string => {
+export const hsvToHsl = (hsv: Hsv): Hsl => {
   'worklet';
   const lPrime = (2 - hsv.s) * hsv.v;
   const divisor = lPrime <= 1 ? lPrime : 2 - lPrime;
@@ -19,7 +19,15 @@ export const hsvToHsl = (hsv: Hsv): string => {
   const saturation = clamp(sPrime * 100, 0, 100);
   const lightness = clamp(lPrime * 50, 0, 100);
 
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  return {
+    h: hue,
+    s: saturation,
+    l: lightness,
+  };
+};
+
+export const hslToHslaString = (hsl: Hsl, alpha = 1): string => {
+  return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${alpha})`;
 };
 
 // from a color and a wheel radius, calculate the appropriate puck coords
