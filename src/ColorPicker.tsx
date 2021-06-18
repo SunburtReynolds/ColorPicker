@@ -40,11 +40,11 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
   // coordinates of center of puck
   const puckCoords = useSharedValue<Coordinates>({x: 0, y: 0});
   // range 0 to 360 deg
-  const hue = useSharedValue(0);
+  const hue = useSharedValue(initialColor.h);
   // range 0 to 1
-  const saturation = useSharedValue(0);
+  const saturation = useSharedValue(initialColor.s);
   // range 0 to 1
-  const value = useSharedValue(1);
+  const value = useSharedValue(initialColor.v);
   // range 0.9 to 1
   const ringScale = useSharedValue(1);
 
@@ -92,7 +92,15 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
     });
   }, [navigation, saveColor, hsl]);
 
-  const onEndGesture = (hsl: Hsl) => setHsl(hsl);
+  const onEndColorPickerGesture = (hsl: Hsl) => setHsl(hsl);
+  const onEndSliderGesture = () => {
+    const newHsl = hsvToHsl({
+      h: hue.value,
+      s: saturation.value,
+      v: value.value,
+    });
+    setHsl(newHsl);
+  };
 
   const gestureHandler = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
@@ -139,7 +147,7 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
           v: value.value,
         });
 
-        runOnJS(onEndGesture)(hsl);
+        runOnJS(onEndColorPickerGesture)(hsl);
       },
     },
     [wheelRadius],
@@ -184,7 +192,11 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
           </PanGestureHandler>
         </View>
       </View>
-      <Slider currentHsl={hsl} onEndGesture={onEndGesture} />
+      <Slider
+        currentHsl={hsl}
+        value={value}
+        onEndGesture={onEndSliderGesture}
+      />
       <ComplimentaryColors />
     </View>
   );
