@@ -17,7 +17,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Item} from 'react-navigation-header-buttons';
 
+import {ComplimentaryColors} from './ComplimentaryColors';
 import {HeaderButtons} from './HeaderButtons';
+import {Slider} from './Slider';
 import {Coordinates, Hsl, Hsv, RootStackParamList} from './types';
 import {deriveCoordsFromHsv, hslToHslaString, hsvToHsl, onMove} from './utils';
 
@@ -111,7 +113,6 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
           [0, wheelRadius * 2],
           [1, 0.9],
         );
-        console.log('scale', distanceMoved, scale);
         ringScale.value = scale;
 
         // update puck and color
@@ -183,15 +184,17 @@ export const ColorPicker: React.FC<Props> = ({navigation}) => {
           </PanGestureHandler>
         </View>
       </View>
+      <Slider currentHsl={hsl} onEndGesture={onEndGesture} />
+      <ComplimentaryColors />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, alignItems: 'center', justifyContent: 'flex-start'},
+  container: {flex: 1, alignItems: 'center', justifyContent: 'space-between'},
   wheelContainer: {
     position: 'relative',
-    marginTop: 48,
+    marginVertical: 48,
     alignItems: 'center',
     justifyContent: 'center',
     width: '80%',
